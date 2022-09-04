@@ -109,16 +109,61 @@ df_scaler = norm.fit_transform(df)
 
 Agora estamos prontos para realizar o agrupamento com KMeans, mas antes, é necessário passar o número correto de clusters (k) para o algoritmo,
 o que é um pouco estranho, já que alguns poderiam esperar que o agrupamento fornecesse tal valor de forma independente. Porém, não é o caso. 
-Para descobrir o valor k, utiliza-se o método Elbow, que compara duas grandezas, a inércia (mede o quão bem um conjunto de dados é agrupado pelo K-Means)
-e o valor de clusters (k). O valor de k ótimo é obitdo plotando tal gráfico e obtendo o ponto "cotovelo". Abaixo é mostrado tal passo:
+Para descobrir o valor k, utiliza-se o método Elbow, que compara duas grandezas, a inércia (que é a medida do quão bem um conjunto de dados 
+é agrupado pelo K-Means) e o valor de clusters (k). O valor de k ótimo é obitdo plotando tal gráfico e obtendo o ponto "cotovelo". Abaixo é mostrado tal passo:
 
 
 ```
-# descobrindo o numero de clusters (k) com o ELBOW METHOD.
+# Descobrindo o numero de clusters (k) com o ELBOW METHOD.
 
 inertia = []
 for k in range(2,11,1):
     kmeans = KMeans(n_clusters=k, random_state=99)
     kmeans.fit(df_scaler)
     inertia.append(kmeans.inertia_)
+
+
+# Plotagem do Gráfico
+
+x = list(range(2,11,1))
+fig = plt.figure(figsize=(12,6))
+sns.lineplot(x=x, y=inertia, marker='o', markersize=10, color='black', lw=2, mfc='red')
+plt.xlabel('Número de Clusters (K)', fontsize=15)
+plt.ylabel('Inércia', fontsize=15)
+plt.xticks(fontsize=15)
+plt.yticks(fontsize=15)
 ```
+O resultado é a Figura abaixo:
+
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/102380417/188332249-8a20cc7f-abb5-4a8f-b788-991791b69c79.png" width="700px" />
+</div>
+
+Deste gráfico, poderia-se escolher o valor de k = 3 para a realização do agrupamento, porém, pode-se utilizar o silhouette score (Outra medida
+do quão bom a clusterização é para um dado k) em função do número de clusters. O mesmo procedimento realizado acima, é feito para o silhouette score:
+
+```
+sil = []
+for k in range(2,11,1):
+    kmeans = KMeans(n_clusters=k, random_state=99)
+    kmeans.fit_predict(df_scaler)
+    score = silhouette_score(df_scaler, kmeans.labels_)
+    sil.append(score)
+    
+
+fig = plt.figure(figsize=(12,6))
+sns.lineplot(x=x, y=sil, marker='o', markersize=10, color='black', lw=2, mfc='red')
+plt.ylabel('Silhouette Score', fontsize=15)
+plt.xlabel('Número de Clusters (K)', fontsize=15)
+plt.xticks(fontsize=15)
+plt.yticks(fontsize=15)
+```
+
+O gráfico mostra que o valor de k = 2 e k = 3 são muito parecidos, dado não muito visível para o gráfico da inércia X k. Mas mesmo sendo parecidos,
+o valor para k = 3 possui um silhouette score maior do que para k = 2:
+
+
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/102380417/188332720-748947a4-2c7b-4d12-bf35-10e6e29a9830.png" width="700px" />
+</div>
+
