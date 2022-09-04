@@ -201,20 +201,28 @@ Porém, essa tarefa não será realizada.
 Uma outra coisa que pode ser feita é a visualização de fato dos clusters. Existem formas de fazer a plotagem dos clusters para dados com dimensões maiores do que 2, mas para fins didáticos, realizarei a redução de dimensionalidade utilziando o PCA, que também é um algoritmo de aprendizado não supervisionado.
 
 ```
+# Realizando a cópia do dataset original
 df_pca = df.copy()
 
+# Reduzindo a dimensionalidade do dataset para 2 para a plotagem do gráfico abaixo
 pca = PCA(n_components=2)
 cpca = pca.fit_transform(df_pca)
 
-
+# Novamente treinando o algoritmo, mas agora com o dataset com dimensão reduzida
 kmeans2 = KMeans(n_clusters=3, random_state=99)
 kmeans2.fit(cpca)
 
+# Adquirindo os labels dos centroids e dos pontos em si
 centroids = kmeans2.cluster_centers_
 labels = kmeans2.labels_
 
+# Plotagem do gráfico
 plt.figure(figsize=(12,6))
 sns.set_theme(style='whitegrid')
 sns.scatterplot(x=cpca[:,0], y=cpca[:,1], hue=clas, palette=["b", "g", "r"], s=50)
 sns.scatterplot(x=centroids[:,0], y=centroids[:,1], s = 200)
 ```
+
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/102380417/188333514-11215958-1320-40fc-b3f4-b2c46bff5c0d.png" width="700px" />
+</div>
