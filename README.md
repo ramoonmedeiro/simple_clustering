@@ -167,3 +167,54 @@ o valor para k = 3 possui um silhouette score maior do que para k = 2:
   <img src="https://user-images.githubusercontent.com/102380417/188332720-748947a4-2c7b-4d12-bf35-10e6e29a9830.png" width="700px" />
 </div>
 
+Agora sim pode-se realizar o treinamento do KMeans utilizando o número de cluster correto (k=3). Além disso, já adiciona ao Dataframe original os valores
+dos labels armazenados na variável y_kmeans, lembrando que os labels adquiridos são referentes aos números de cada cluster.
+
+```
+# Treinamento dos algoritmo
+
+kmeans1 = KMeans(n_clusters=3, random_state=99)
+y_kmeans = kmeans1.fit_predict(df_scaler)
+
+# Adicioandno labels ao DataFrame original
+
+agroup = pd.DataFrame(y_kmeans, columns=['label'])
+df_final = pd.concat([df, agroup], axis=1)
+```
+
+Das 178 entradas do DataFrame original, 55 pertecem ao cluster 0, 63 pertencem ao cluster 1 e 60 pertecem ao cluster 2. 
+
+```
+df_final['label'].value_counts()
+
+1    63
+2    60
+0    55
+Name: label, dtype: int64
+```
+
+Deixar rotulado apenas como
+o número do cluster não é tão favorável assim, deve-se analisar um pouco mais os dados para poder atribuir labels corretos aos clusters, dado que 
+a descrição do dataset nos diz que são vinhos de tres cultivos diferentes, então o nosso trabalho seria tentar atribuir cada cluster a um dado cultivo.
+Porém, essa tarefa não será realizada.
+
+Uma outra coisa que pode ser feita é a visualização de fato dos clusters. Existem formas de fazer a plotagem dos clusters para dados com dimensões maiores do que 2, mas para fins didáticos, realizarei a redução de dimensionalidade utilziando o PCA, que também é um algoritmo de aprendizado não supervisionado.
+
+```
+df_pca = df.copy()
+
+pca = PCA(n_components=2)
+cpca = pca.fit_transform(df_pca)
+
+
+kmeans2 = KMeans(n_clusters=3, random_state=99)
+kmeans2.fit(cpca)
+
+centroids = kmeans2.cluster_centers_
+labels = kmeans2.labels_
+
+plt.figure(figsize=(12,6))
+sns.set_theme(style='whitegrid')
+sns.scatterplot(x=cpca[:,0], y=cpca[:,1], hue=clas, palette=["b", "g", "r"], s=50)
+sns.scatterplot(x=centroids[:,0], y=centroids[:,1], s = 200)
+```
