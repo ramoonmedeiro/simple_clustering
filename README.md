@@ -200,6 +200,8 @@ Porém, essa tarefa não será realizada.
 
 Uma outra coisa que pode ser feita é a visualização de fato dos clusters. Existem formas de fazer a plotagem dos clusters para dados com dimensões maiores do que 2, mas para fins didáticos, realizarei a redução de dimensionalidade utilziando o PCA, que também é um algoritmo de aprendizado não supervisionado.
 
+Os pontos em laranja são os centróides que formam cada cluster. E é possível ver os 3 clusters que foi determinado na etapa anterior.
+
 ```
 # Realizando a cópia do dataset original
 df_pca = df.copy()
