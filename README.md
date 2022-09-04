@@ -226,5 +226,5 @@ sns.scatterplot(x=centroids[:,0], y=centroids[:,1], s = 200)
 ```
 
 <div align="center">
-  <img src="https://user-images.githubusercontent.com/102380417/188333514-11215958-1320-40fc-b3f4-b2c46bff5c0d.png" width="700px" />
+  <img src="https://user-images.githubusercontent.com/102380417/188333514-11215958-1320-40fc-b3f4-b2c46bff5c0d.png" width="800px" />
 </div>
